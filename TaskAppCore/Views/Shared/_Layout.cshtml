@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<style>
+    .marg {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+</style>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="marg">
+        <table width="100%">
+            <tr>
+                <td class="text-right panel-body bg-primary">
+                    @if (User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+                    }
+                </td>
+            </tr>
+            <tr><td height="10px"></td></tr>
+            <tr>
+                <td>@RenderBody()</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
