@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using TaskAppCore.Models;
 using TaskAppCore.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskAppCore.Controllers
 {
@@ -18,6 +19,8 @@ namespace TaskAppCore.Controllers
         private IUserValidator<AppUser> userValidator;
         private IPasswordValidator<AppUser> passwordValidator;
         private IPasswordHasher<AppUser> passwordHasher;
+
+        // jesli chodzi o nazewnictwo to sklanialbym sie do nazywania w nawiązaniu do typu, np. teamRepository plus dobra praktyka jest dawanie przed prywatnymi polami "_"
         private ITeamRepository teamContext;
 
         public AdminController(UserManager<AppUser> usrManager, IUserValidator<AppUser> userValid, 
@@ -30,8 +33,8 @@ namespace TaskAppCore.Controllers
             passwordHasher = passHash;
             teamContext = teamCtx;
         }
-
-        public ViewResult Index() => View(userManager.Users);
+        // Dodając include mówisz entity frameworkowi, ze ma załączyć referencje do Tabeli Team i zaladować z niej dane - poczytaj o "lazy loading"
+        public ViewResult Index() => View(userManager.Users.Include(x=>x.Team));
 
         public ViewResult Create() => View();
 
@@ -44,7 +47,8 @@ namespace TaskAppCore.Controllers
                 {
                     UserName = model.Name,
                     Email = model.Email,
-                    TeamId = teamContext.Teams.Where(t => t.TeamId == model.TeamId).FirstOrDefault().TeamId
+                    // Entity Framework zalatwi za ciebie cale powiazanie i utworzy Foreign Key'a
+                    Team = teamContext.Teams.FirstOrDefault(t => t.TeamId == model.TeamId)
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
