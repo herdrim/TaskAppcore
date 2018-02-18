@@ -9,7 +9,6 @@ namespace TaskAppCore.Models
 {
     public class Task
     {
-        [Key]
         public int TaskId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -21,12 +20,7 @@ namespace TaskAppCore.Models
         public bool IsTested { get; set; }
         public bool IsFinished { get; set; }
 
-        [ForeignKey("Team")]
-        public int? TeamId { get; set; }        
-        public string UserId { get; set; }
-
         public virtual Team Team { get; set; }
-        [ForeignKey("UserId")]
         public virtual AppUser User { get; set; }
     }
 }

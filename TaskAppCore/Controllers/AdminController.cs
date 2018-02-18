@@ -14,27 +14,26 @@ namespace TaskAppCore.Controllers
     [Authorize(Roles = "Admins")]
     public class AdminController : Controller
     {
-        private UserManager<AppUser> userManager;
+        private UserManager<AppUser> _userManager;
         // pola potrzebne do edycji usera
-        private IUserValidator<AppUser> userValidator;
-        private IPasswordValidator<AppUser> passwordValidator;
-        private IPasswordHasher<AppUser> passwordHasher;
+        private IUserValidator<AppUser> _userValidator;
+        private IPasswordValidator<AppUser> _passwordValidator;
+        private IPasswordHasher<AppUser> _passwordHasher;
 
-        // jesli chodzi o nazewnictwo to sklanialbym sie do nazywania w nawiązaniu do typu, np. teamRepository plus dobra praktyka jest dawanie przed prywatnymi polami "_"
-        private ITeamRepository teamContext;
+        private ITeamRepository _teamRepository;
 
         public AdminController(UserManager<AppUser> usrManager, IUserValidator<AppUser> userValid, 
             IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passHash, ITeamRepository teamCtx)
         {
-            userManager = usrManager;
+            _userManager = usrManager;
             // inicjacja pól potrzebnych do edycji usera
-            userValidator = userValid;
-            passwordValidator = passValid;
-            passwordHasher = passHash;
-            teamContext = teamCtx;
+            _userValidator = userValid;
+            _passwordValidator = passValid;
+            _passwordHasher = passHash;
+            _teamRepository = teamCtx;
         }
         // Dodając include mówisz entity frameworkowi, ze ma załączyć referencje do Tabeli Team i zaladować z niej dane - poczytaj o "lazy loading"
-        public ViewResult Index() => View(userManager.Users.Include(x=>x.Team));
+        public ViewResult Index() => View(_userManager.Users.Include(x => x.Team));
 
         public ViewResult Create() => View();
 
@@ -48,10 +47,10 @@ namespace TaskAppCore.Controllers
                     UserName = model.Name,
                     Email = model.Email,
                     // Entity Framework zalatwi za ciebie cale powiazanie i utworzy Foreign Key'a
-                    Team = teamContext.Teams.FirstOrDefault(t => t.TeamId == model.TeamId)
+                    Team = _teamRepository.Teams.FirstOrDefault(t => t.TeamId == model.TeamId)
                 };
 
-                IdentityResult result = await userManager.CreateAsync(user, model.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");
@@ -69,11 +68,11 @@ namespace TaskAppCore.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             // znajduje użytkownika po id, przypisuje go do user i sprawdza czy istnieje
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 // wynikiem DeleteAsync jest IdentityResult, które sprawdzamy czy się udało.
-                IdentityResult result = await userManager.DeleteAsync(user);
+                IdentityResult result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
@@ -85,7 +84,7 @@ namespace TaskAppCore.Controllers
                 ModelState.AddModelError("", "User Not Found");
             }
 
-            return View("Index", userManager.Users);
+            return View("Index", _userManager.Users);
         }
 
         // Metoda dodająca errory do modelu
@@ -97,7 +96,7 @@ namespace TaskAppCore.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
 
             if (user != null)
                 return View(user);
@@ -109,14 +108,14 @@ namespace TaskAppCore.Controllers
         public async Task<IActionResult> Edit(string id, string email, string password, int teamId)
         {
             // znalezienie usera po id
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
 
             if(user != null)
             {
                 // Przypisanie do user.Email maila podanego z formularza
                 user.Email = email;
                 // walidacja usera z nowym mailem
-                IdentityResult validEmail = await userValidator.ValidateAsync(userManager, user);
+                IdentityResult validEmail = await _userValidator.ValidateAsync(_userManager, user);
                 if (!validEmail.Succeeded)
                     AddErrorsFromResult(validEmail);
                 
@@ -124,22 +123,22 @@ namespace TaskAppCore.Controllers
                 if (!string.IsNullOrEmpty(password))
                 {
                     // walidacja hasła
-                    validPass = await passwordValidator.ValidateAsync(userManager, user, password);
+                    validPass = await _passwordValidator.ValidateAsync(_userManager, user, password);
                     // jeżeli jest ok to hashowanie hasła
                     if (validPass.Succeeded)
-                        user.PasswordHash = passwordHasher.HashPassword(user, password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, password);
                     else
                         AddErrorsFromResult(validPass);
                 }
 
-                user.Team.TeamId = teamContext.Teams.Where(t => t.TeamId == teamId).FirstOrDefault().TeamId;
+                user.Team.TeamId = _teamRepository.Teams.Where(t => t.TeamId == teamId).FirstOrDefault().TeamId;
 
                 if((validEmail.Succeeded && validPass == null) || 
                     (validEmail.Succeeded && password != string.Empty && validPass.Succeeded))
                 {
                     // zapis usera ze zmienionymi danymi(update) - 
                     // dopóki ta metoda nie jest wywołana użytkownik nie jest zapisany do db
-                    IdentityResult result = await userManager.UpdateAsync(user);
+                    IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                         return RedirectToAction("Index");
                     else

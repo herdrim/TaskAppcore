@@ -10,15 +10,15 @@ namespace TaskAppCore.Controllers
 {
     public class HomeController : Controller
     {
-        ITeamRepository repository;
+        ITeamRepository _teamRepository;
         public int PageSize = 2;
 
         public HomeController(ITeamRepository repo)
         {
-            repository = repo;
+            _teamRepository = repo;
         }
 
         [Authorize]
-        public IActionResult Index() => View(repository.Teams.Where(t => t.TeamId == 1).FirstOrDefault());
+        public IActionResult Index() => View(_teamRepository.Teams.Where(t => t.TeamId == 1).FirstOrDefault());
     }
 }

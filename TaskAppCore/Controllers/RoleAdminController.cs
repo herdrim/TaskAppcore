@@ -15,16 +15,16 @@ namespace TaskAppCore.Controllers
     [Authorize(Roles = "Admins")]
     public class RoleAdminController : Controller
     {
-        private RoleManager<IdentityRole> roleManager;
-        private UserManager<AppUser> userManager;
+        private RoleManager<IdentityRole> _roleManager;
+        private UserManager<AppUser> _userManager;
 
         public RoleAdminController(RoleManager<IdentityRole> roleMgr, UserManager<AppUser> usrMgr)
         {
-            roleManager = roleMgr;
-            userManager = usrMgr;
+            _roleManager = roleMgr;
+            _userManager = usrMgr;
         }
 
-        public IActionResult Index() => View(roleManager.Roles);
+        public IActionResult Index() => View(_roleManager.Roles);
 
         public IActionResult Create() => View();
 
@@ -34,7 +34,7 @@ namespace TaskAppCore.Controllers
             if(ModelState.IsValid)
             {
                 // stworzenie nowej roli
-                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(name));
+                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");
@@ -49,11 +49,11 @@ namespace TaskAppCore.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             // znalezienie roli po Id
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
             if(role != null)
             {
                 // usunięcie roli
-                IdentityResult result = await roleManager.DeleteAsync(role);
+                IdentityResult result = await _roleManager.DeleteAsync(role);
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");
@@ -65,19 +65,19 @@ namespace TaskAppCore.Controllers
                 ModelState.AddModelError("", "No role found");
             }
 
-            return View("Index", roleManager.Roles);
+            return View("Index", _roleManager.Roles);
         }
         
         public async Task<IActionResult> Edit(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
             List<AppUser> members = new List<AppUser>();
             List<AppUser> nonMembers = new List<AppUser>();
 
-            foreach(AppUser user in userManager.Users)
+            foreach(AppUser user in _userManager.Users)
             {
                 // sprawdzenie czy user ma podaną role - jeżeli tak to zmienna list reprezentuje zmienną members inaczej nonMembers
-                var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                var list = await _userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                 list.Add(user);
             }
 
@@ -99,10 +99,10 @@ namespace TaskAppCore.Controllers
                 foreach(string userId in model.IdsToAdd ?? new string[] { })
                 {
                     // znalezienie użytkownika po id następnie przypisanie użytkownikowi roli
-                    AppUser user = await userManager.FindByIdAsync(userId);
+                    AppUser user = await _userManager.FindByIdAsync(userId);
                     if(user != null)
                     {
-                        result = await userManager.AddToRoleAsync(user, model.RoleName);
+                        result = await _userManager.AddToRoleAsync(user, model.RoleName);
                         if (!result.Succeeded)
                             AddErrorsFromResult(result);
                     }
@@ -112,10 +112,10 @@ namespace TaskAppCore.Controllers
                 foreach (string userId in model.IdsToDelete ?? new string[] { })
                 {
                     // znalezienie użytkownika po id następnie usunięcie użytkownikowi roli
-                    AppUser user = await userManager.FindByIdAsync(userId);
+                    AppUser user = await _userManager.FindByIdAsync(userId);
                     if(user != null)
                     {
-                        result = await userManager.RemoveFromRoleAsync(user, model.RoleName);
+                        result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
                         if (!result.Succeeded)
                             AddErrorsFromResult(result);
                     }

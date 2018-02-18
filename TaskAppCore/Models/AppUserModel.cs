@@ -10,7 +10,6 @@ namespace TaskAppCore.Models
     // model użytkownika użyty do stworzenia db(wykorzystany w AppIdentityDbContext)
     public class AppUser : IdentityUser
     {
-        [ForeignKey("TeamId")]
         public Team Team { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
     }

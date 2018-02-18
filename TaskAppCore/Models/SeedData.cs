@@ -28,10 +28,10 @@ namespace TaskAppCore.Models
             if (!context.Tasks.Any())
             {
                 context.Tasks.AddRange(                
-                    new Task{ Name="task1", Description="do sth1", Deathline=new DateTime(2018, 10, 10), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null, TeamId=1, UserId=null },
-                    new Task{ Name="task2", Description="do sth2", Deathline=new DateTime(2018, 08, 22), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null, TeamId=null, UserId=null },
-                    new Task{ Name="task3", Description="do sth3", Deathline=new DateTime(2018, 02, 10), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null, TeamId=1, UserId=null },
-                    new Task{ Name="task4", Description="do sth4", Deathline=new DateTime(2018, 11, 13), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null, TeamId=2, UserId=null }
+                    new Task{ Name="task1", Description="do sth1", Deathline=new DateTime(2018, 10, 10), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null },
+                    new Task{ Name="task2", Description="do sth2", Deathline=new DateTime(2018, 08, 22), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null },
+                    new Task{ Name="task3", Description="do sth3", Deathline=new DateTime(2018, 02, 10), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null },
+                    new Task{ Name="task4", Description="do sth4", Deathline=new DateTime(2018, 11, 13), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null }
                 );
                 context.SaveChanges();
             }

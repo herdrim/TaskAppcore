@@ -13,13 +13,13 @@ namespace TaskAppCore.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private UserManager<AppUser> userManager;
-        private SignInManager<AppUser> signInManager;
+        private UserManager<AppUser> _userManager;
+        private SignInManager<AppUser> _signInManager;
 
         public AccountController(UserManager<AppUser> usrManager, SignInManager<AppUser> signManager)
         {
-            userManager = usrManager;
-            signInManager = signManager;
+            _userManager = usrManager;
+            _signInManager = signManager;
         }
 
         [AllowAnonymous]
@@ -37,13 +37,13 @@ namespace TaskAppCore.Controllers
             if(ModelState.IsValid)
             {
                 // wyszukujemy użytkownika po emailu
-                AppUser user = await userManager.FindByEmailAsync(details.Email);
+                AppUser user = await _userManager.FindByEmailAsync(details.Email);
                 if(user != null)
                 {
                     // anulacja obecnej sesji użytkownika jeśli była(wylogowanie)
-                    await signInManager.SignOutAsync();
+                    await _signInManager.SignOutAsync();
                     // Zalogowanie
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, details.Password, false, false);
+                    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, details.Password, false, false);
 
                     // (returnUrl ?? "/") jest jak -> (returnUrl != null ? returnUrl : "/")
                     if (result.Succeeded)
@@ -58,7 +58,7 @@ namespace TaskAppCore.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
