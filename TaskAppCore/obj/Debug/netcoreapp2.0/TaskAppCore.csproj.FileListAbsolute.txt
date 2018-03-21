@@ -1,0 +1,11 @@
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\bin\Debug\netcoreapp2.0\TaskAppCore.deps.json
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\bin\Debug\netcoreapp2.0\TaskAppCore.runtimeconfig.json
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\bin\Debug\netcoreapp2.0\TaskAppCore.runtimeconfig.dev.json
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\bin\Debug\netcoreapp2.0\TaskAppCore.dll
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\bin\Debug\netcoreapp2.0\TaskAppCore.pdb
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.csprojResolveAssemblyReference.cache
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.csproj.CoreCompileInputs.cache
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.AssemblyInfoInputs.cache
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.AssemblyInfo.cs
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.dll
+C:\Dokumenty\Apps\TaskAppCore\TaskAppCore\obj\Debug\netcoreapp2.0\TaskAppCore.pdb

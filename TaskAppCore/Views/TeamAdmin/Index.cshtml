@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Team>
+@{
+    ViewBag.Title = "Teams";
+}
+
+<div class="bg-primary panel-body"><h4>Teams</h4></div>
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<table class="table table-condensed table-bordered">
+    <tr><th>Name</th><th>Members</th></tr>
+    @foreach(Team team in Model)
+    {
+        <tr>
+            <td>@team.Name</td>
+            <td>
+                @if (team.Members.Count != 0)
+                {
+                    foreach (var member in team.Members)
+                    {
+                        @String.Concat(member.UserName, ", ")
+                    }
+                }
+                else
+                {
+                    <p>No Members</p>
+                }
+            </td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@team.TeamId" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-teamId="@team.TeamId">Edit</a>
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<a class="btn btn-primary" asp-action="Create">Create</a>

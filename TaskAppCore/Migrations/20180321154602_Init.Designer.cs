@@ -11,7 +11,7 @@ using TaskAppCore.Models;
 namespace TaskAppCore.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20180218185657_Init")]
+    [Migration("20180321154602_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

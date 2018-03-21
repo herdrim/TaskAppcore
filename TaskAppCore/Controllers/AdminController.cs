@@ -23,14 +23,14 @@ namespace TaskAppCore.Controllers
         private ITeamRepository _teamRepository;
 
         public AdminController(UserManager<AppUser> usrManager, IUserValidator<AppUser> userValid, 
-            IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passHash, ITeamRepository teamCtx)
+            IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passHash, ITeamRepository teamRepo, AppIdentityDbContext ctx)
         {
             _userManager = usrManager;
             // inicjacja pól potrzebnych do edycji usera
             _userValidator = userValid;
             _passwordValidator = passValid;
             _passwordHasher = passHash;
-            _teamRepository = teamCtx;
+            _teamRepository = teamRepo;
         }
         // Dodając include mówisz entity frameworkowi, ze ma załączyć referencje do Tabeli Team i zaladować z niej dane - poczytaj o "lazy loading"
         public ViewResult Index() => View(_userManager.Users.Include(x => x.Team));
@@ -45,12 +45,13 @@ namespace TaskAppCore.Controllers
                 AppUser user = new AppUser
                 {
                     UserName = model.Name,
-                    Email = model.Email,
-                    // Entity Framework zalatwi za ciebie cale powiazanie i utworzy Foreign Key'a
-                    Team = _teamRepository.Teams.FirstOrDefault(t => t.TeamId == model.TeamId)
+                    Email = model.Email
                 };
 
-                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                if (model.TeamId > 0)
+                    user.TeamId = _teamRepository.Teams.FirstOrDefault(t => t.TeamId == model.TeamId).TeamId;
+
+                IdentityResult result = await _userManager.CreateAsync(user, model.Password);              
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");

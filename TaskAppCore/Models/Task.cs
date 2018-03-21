@@ -20,7 +20,11 @@ namespace TaskAppCore.Models
         public bool IsTested { get; set; }
         public bool IsFinished { get; set; }
 
-        public virtual Team Team { get; set; }
-        public virtual AppUser User { get; set; }
+        public int? TeamId { get; set; }
+        [ForeignKey("TeamId")]
+        public Team Team { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public AppUser User { get; set; }
     }
 }
