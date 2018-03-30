@@ -8,13 +8,30 @@ namespace TaskAppCore.Models
 {
     public class EFTaskRepository : ITaskRepository
     {
-        private TaskCoreDbContext context;
+        private AppIdentityDbContext _context;
 
-        public EFTaskRepository(TaskCoreDbContext ctx)
+        public EFTaskRepository(AppIdentityDbContext ctx)
         {
-            context = ctx;
+            _context = ctx;
         }
 
-        public IEnumerable<Task> Tasks => context.Tasks.Include(x => x.Team).Include(x => x.User);
+        public IEnumerable<Task> Tasks => _context.Tasks.Include(x => x.Team).Include(x => x.User);
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
+        public void CreateTask(Task task)
+        {
+            _context.Tasks.Add(task);
+            _context.SaveChanges();
+        }
+
+        public void DeleteTask(Task task)
+        {
+            _context.Tasks.Remove(task);
+            _context.SaveChanges();
+        }
     }
 }

@@ -16,5 +16,7 @@ namespace TaskAppCore.Models
         void AddMembers(List<AppUser> users, Team team);
 
         void CreateTeam(Team team, AppUser firstMember = null);
+
+        void DeleteTeam(Team team);
     }
 }

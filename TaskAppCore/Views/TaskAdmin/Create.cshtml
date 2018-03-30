@@ -1,0 +1,44 @@
+﻿@model TaskAppCore.Models.ViewModels.TaskAdminCreateModel
+
+@{
+    ViewBag.Title = "Create Task";
+}
+
+<div class="bg-primary panel-body"><h4>Create Team</h4></div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Deathline" class="control-label"></label>
+                <input type="date" asp-for="Deathline" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamId" class="control-label">Team Name</label>
+                <select asp-for="TeamId">
+                    @foreach(var t in Model.TeamsList)
+                    {
+                        <option value="@t.TeamId">@t.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-default">Cancel</a>
+</div>
+

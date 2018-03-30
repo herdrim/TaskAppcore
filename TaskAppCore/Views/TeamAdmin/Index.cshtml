@@ -27,7 +27,7 @@
                 }
             </td>
             <td>
-                <form asp-action="Delete" asp-route-id="@team.TeamId" method="post">
+                <form asp-action="Delete" asp-route-teamId="@team.TeamId" method="post">
                     <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-teamId="@team.TeamId">Edit</a>
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>

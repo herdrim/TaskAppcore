@@ -10,31 +10,37 @@ namespace TaskAppCore.Models
 {
     public class EFTeamRepository : ITeamRepository
     {
-        private AppIdentityDbContext context;
+        private AppIdentityDbContext _context;
         private UserManager<AppUser> _userManager;
 
         public EFTeamRepository(AppIdentityDbContext ctx, UserManager<AppUser> userManager)
         {
-            context = ctx;
+            _context = ctx;
             _userManager = userManager;
         }
 
-        public IEnumerable<Team> Teams => context.Teams.Include(x => x.Members).Include(x => x.Tasks);
+        public IEnumerable<Team> Teams => _context.Teams.Include(x => x.Members).Include(x => x.Tasks);
 
         public void SaveChanges()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void CreateTeam(Team team, AppUser firstMember = null)
         {
-            context.Teams.Add(team);
+            _context.Teams.Add(team);
             if (firstMember != null && firstMember.TeamId == null)
             {
                 firstMember.TeamId = team.TeamId;
-                context.Users.Update(firstMember);
+                _context.Users.Update(firstMember);
             }
-            context.SaveChanges();
+            _context.SaveChanges();
+        }
+
+        public void DeleteTeam(Team team)
+        {
+            _context.Teams.Remove(team);
+            _context.SaveChanges();
         }
 
         public void AddMembers(List<AppUser> users, Team team)
@@ -53,8 +59,8 @@ namespace TaskAppCore.Models
             {                
                 teamToAdd.Members.Add(member);                
             }
-            context.Teams.Update(teamToAdd);
-            context.SaveChanges();
+            _context.Teams.Update(teamToAdd);
+            _context.SaveChanges();
         }
 
         public string HashPassword(string password)

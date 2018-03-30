@@ -47,9 +47,11 @@ namespace TaskAppCore
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
+                options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<AppIdentityDbContext>();
 
 
+            services.AddTransient<IUserRepository, EFUserRepository>();
             services.AddTransient<ITaskRepository, EFTaskRepository>();
             services.AddTransient<ITeamRepository, EFTeamRepository>();
             services.AddMvc();

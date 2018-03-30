@@ -38,10 +38,26 @@ namespace TaskAppCore.Controllers
                     Password = _teamRepository.HashPassword(model.Password)
                 };
 
-                AppUser currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
-                _teamRepository.CreateTeam(team, currentUser);
+                _teamRepository.CreateTeam(team);
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int teamId)
+        {
+            Team team = _teamRepository.Teams.FirstOrDefault(x => x.TeamId == teamId);
+            if(team != null)
+            {
+                _teamRepository.DeleteTeam(team);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Team Not Found");
+            }
+
+            return RedirectToAction("Index");
+            //return View("Index", _teamRepository.Teams);
         }
 
         public IActionResult Edit(int teamId)

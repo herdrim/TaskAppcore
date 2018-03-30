@@ -7,6 +7,12 @@ namespace TaskAppCore.Models
 {
     public interface ITaskRepository
     {
-        IEnumerable<Task> Tasks { get; }
+        IEnumerable<Models.Task> Tasks { get; }
+
+        void SaveChanges();
+
+        void CreateTask(Models.Task task);
+
+        void DeleteTask(Models.Task task);
     }
 }
