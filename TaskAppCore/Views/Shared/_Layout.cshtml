@@ -23,23 +23,38 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="dropdown">
-                    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                        <font color="white">Administration</font>
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="btn btn-success" asp-controller="Admin" asp-action="Index">User Accounts</a></li>
-                        <li><a class="btn btn-success" asp-controller="TeamAdmin" asp-action="Index">Teams</a></li>
-                        <li><a class="btn btn-success" asp-controller="TaskAdmin" asp-action="Index">Tasks</a></li>
-                    </ul>
-                </li>
-                <li>
-                    @if (User?.Identity?.IsAuthenticated ?? false)
-                    {
+                @if (User.IsInRole("Admins"))
+                {
+                    <li class="dropdown">
+                        <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <font color="white">Administration</font>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="btn btn-success" asp-controller="Admin" asp-action="Index">User Accounts</a></li>
+                            <li><a class="btn btn-success" asp-controller="TeamAdmin" asp-action="Index">Teams</a></li>
+                            <li><a class="btn btn-success" asp-controller="TaskAdmin" asp-action="Index">Tasks</a></li>
+                        </ul>
+                    </li>
+                }
+
+                @if (User?.Identity?.IsAuthenticated ?? false)
+                {
+                    <li>
                         <a asp-controller="Account" asp-action="Logout" class="btn btn-danger"><font color="white">Logout</font></a>
-                    }
-                </li>
+                    </li>
+                }
+
+                @if (!(User?.Identity?.IsAuthenticated ?? false))
+                {
+                    <li>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-success"><font color="white">Login</font></a>
+                    </li>
+                    <li>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-success"><font color="white">Register</font></a>
+                    </li>
+                }
+
             </ul>
         </div>
     </nav>

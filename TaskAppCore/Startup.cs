@@ -33,8 +33,8 @@ namespace TaskAppCore
             //services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
             //services.AddTransient<IUserValidator<AppUser>, CustomUserValidator2>();
 
-            services.AddDbContext<TaskCoreDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("TaskCoreDb")));
+            //services.AddDbContext<TaskCoreDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("TaskCoreDb")));
 
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("TaskCoreDb")));
@@ -68,7 +68,8 @@ namespace TaskAppCore
             app.UseStaticFiles();
             //app.UseIdentity();
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(options =>
+            options.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
         }
     }
 }

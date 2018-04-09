@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using TaskAppCore.Models.ViewModels;
 
 namespace TaskAppCore.Controllers
 {
+    [Authorize(Roles = "Admins")]
     public class TaskAdminController : Controller
     {
         ITaskRepository _taskRepository;
