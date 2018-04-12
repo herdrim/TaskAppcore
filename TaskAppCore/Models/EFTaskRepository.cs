@@ -33,5 +33,11 @@ namespace TaskAppCore.Models
             _context.Tasks.Remove(task);
             _context.SaveChanges();
         }
+
+        public void Update(Task task)
+        {
+            _context.Tasks.Update(task);
+            _context.SaveChanges();
+        }
     }
 }

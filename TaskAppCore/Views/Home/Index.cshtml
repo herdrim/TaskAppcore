@@ -1,15 +1,48 @@
-﻿@model Team
+﻿@model List<TaskAppCore.Models.Task>
+
 @{
-    ViewBag.Title = "Tasks";
+    ViewBag.Title = "Team Tasks";
 }
 
-<h2>Tasks</h2>
+<link type="text/css" href="~/css/DragAndDrop.css" rel="stylesheet" />
+<script src="~/js/DragAndDrop.js" type="text/javascript"></script>
 
-@if (Model != null)
-{
-    <div>
-        <h3>@Model.Name</h3>
-        @Model.TeamId
+
+<div width="100%">
+    <div class="droplist" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+        @foreach (var t in Model)
+        {
+            if (t.IsToDo)
+            {
+                <p draggable="true" ondragstart="drag(event)" id="@t.TaskId">@t.Name</p>
+            }
+        }
     </div>
-}
-
+    <div class="droplist" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+        @foreach (var t in Model)
+        {
+            if (t.IsInProgress)
+            {
+                <p draggable="true" ondragstart="drag(event)" id="@t.TaskId">@t.Name</p>
+            }
+        }
+    </div>
+    <div class="droplist" id="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
+        @foreach (var t in Model)
+        {
+            if (t.IsTested)
+            {
+                <p draggable="true" ondragstart="drag(event)" id="@t.TaskId">@t.Name</p>
+            }
+        }
+    </div>
+    <div class="droplist" id="div4" ondrop="drop(event)" ondragover="allowDrop(event)">
+        @foreach (var t in Model)
+        {
+            if (t.IsFinished)
+            {
+                <p draggable="true" ondragstart="drag(event)" id="@t.TaskId">@t.Name</p>
+            }
+        }
+    </div>
+</div>

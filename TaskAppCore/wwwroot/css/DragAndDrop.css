@@ -1,0 +1,8 @@
+﻿.droplist {
+    float: left;
+    margin: 1em;
+    padding: 1em;
+    min-width: 10%;
+    min-height: 10em;
+    border: 1px solid black;
+}

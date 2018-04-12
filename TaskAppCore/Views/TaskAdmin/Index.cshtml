@@ -30,6 +30,15 @@
                 @Html.DisplayNameFor(model => model.IsToDo)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.IsInProgress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsTested)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsFinished)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Team.Name)
             </th>
             <th>
@@ -41,38 +50,47 @@
     <tbody>
         @foreach (var task in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => task.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.Deathline)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.StartTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.EndTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.IsToDo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.Team.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => task.User.Email)
-                </td>
-                <td>
-                    <form asp-action="Delete" asp-route-taskId="@task.TaskId" method="post">
-                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-taskId="@task.TaskId">Edit</a>
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => task.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.Deathline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.IsToDo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.IsInProgress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.IsTested)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.IsFinished)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.Team.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => task.User.Email)
+            </td>
+            <td>
+                <form asp-action="Delete" asp-route-taskId="@task.TaskId" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-taskId="@task.TaskId">Edit</a>
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
