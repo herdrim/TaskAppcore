@@ -26,21 +26,31 @@ namespace TaskAppCore.Controllers
             _teamRepository = teamRepository;
             _taskRepository = taskRepository;
         }
-        
+
+        #region INDEX WITH AJAX SERVING ACTIONS
+
         public IActionResult Index()
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            Team team = _userRepository.Users.Where(x => x.Id == userId).Select(x => x.Team).FirstOrDefault();
+            int? teamId = _userRepository.Users.FirstOrDefault(x => x.Id == userId).TeamId;
+            Team team = _teamRepository.Teams.FirstOrDefault(t => t.TeamId == teamId);
+            TaskAssignToUserModel taskViewModel = new TaskAssignToUserModel
+            {
+                UserId = userId,
+                TeamTasks = team.Tasks.ToList(),
+                UserTasks = _userRepository.Users.FirstOrDefault(x => x.Id == userId).Tasks.ToList()
+            };
+
             if (team.Tasks != null)
-                return View(team.Tasks.ToList());
+                return View(taskViewModel);
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(string json)
+        public JsonResult UpdateStatus(string json)
         {
-            TaskViewModel model = JsonConvert.DeserializeObject<TaskViewModel>(json);
+            TaskUpdateJsonModel model = JsonConvert.DeserializeObject<TaskUpdateJsonModel>(json);
             Models.Task task = _taskRepository.Tasks.FirstOrDefault(x => x.TaskId == model.TaskId);
             task.IsToDo = model.IsToDo;
             task.IsInProgress = model.IsInProgress;
@@ -48,8 +58,46 @@ namespace TaskAppCore.Controllers
             task.IsFinished = model.IsFinished;
 
             _taskRepository.Update(task);
-            string message = "SUCCESS";
-            return Json(new { Message = message });
+            return Json(new { isValid = true });
+            //return Json(new { isValid = false, message = "Error while updating data" });
         }
+
+        [HttpPost]
+        public JsonResult Assign(string taskId)
+        {
+            int id;
+            if (int.TryParse(taskId, out id))
+            {
+                Models.Task task = _taskRepository.Tasks.FirstOrDefault(x => x.TaskId == id);
+                string userId = _userManager.GetUserId(HttpContext.User);
+                if (_userRepository.Users.FirstOrDefault(u => u.Id == userId).Team == task.Team && task.User == null)
+                {
+                    task.UserId = userId;
+                    _taskRepository.Update(task);
+                    return Json(new { isValid = true });
+                }
+            }
+            return Json(new { isValid = false, message = "Error while parsing id"});
+        }
+
+        [HttpPost]
+        public JsonResult CancelTask(string taskId)
+        {
+            int id;
+            if (int.TryParse(taskId, out id))
+            {
+                Models.Task task = _taskRepository.Tasks.FirstOrDefault(x => x.TaskId == id);
+                string userId = _userManager.GetUserId(HttpContext.User);
+                if (_userRepository.Users.FirstOrDefault(u => u.Id == userId).Equals(task.User))
+                {
+                    task.UserId = null;
+                    _taskRepository.Update(task);
+                    return Json(new { isValid = true });
+                }
+            }
+            return Json(new { isValid = false, message = "Error while parsing id" });
+        }
+        
+        #endregion
     }
 }

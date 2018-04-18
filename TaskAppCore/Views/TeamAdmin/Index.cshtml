@@ -12,6 +12,7 @@
     @foreach(Team team in Model)
     {
         <tr>
+            <td>@team.TeamId</td>
             <td>@team.Name</td>
             <td>
                 @if (team.Members.Count != 0)

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace TaskAppCore.Models.ViewModels
 {
-    public class CreateUserModel
+    public class UserAdminCreateModel
     {
         [Required]
         public string Name { get; set; }
@@ -17,6 +17,15 @@ namespace TaskAppCore.Models.ViewModels
         public string Password { get; set; }
         [Required]
         public int TeamId { get; set; }
+    }
+
+    public class UserAdminEditModel
+    {
+        [Required]
+        public AppUser User { get; set; }
+        [Required]
+        public List<Team> Teams { get; set; }
+
     }
 
     public class LoginUserModel

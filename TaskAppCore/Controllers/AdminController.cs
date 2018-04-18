@@ -21,9 +21,10 @@ namespace TaskAppCore.Controllers
         private IPasswordHasher<AppUser> _passwordHasher;
 
         private ITeamRepository _teamRepository;
+        private IUserRepository _userRepository;
 
         public AdminController(UserManager<AppUser> usrManager, IUserValidator<AppUser> userValid, 
-            IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passHash, ITeamRepository teamRepo, AppIdentityDbContext ctx)
+            IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passHash, ITeamRepository teamRepo, IUserRepository userRepository)
         {
             _userManager = usrManager;
             // inicjacja pól potrzebnych do edycji usera
@@ -31,6 +32,7 @@ namespace TaskAppCore.Controllers
             _passwordValidator = passValid;
             _passwordHasher = passHash;
             _teamRepository = teamRepo;
+            _userRepository = userRepository;
         }
         // Dodając include mówisz entity frameworkowi, ze ma załączyć referencje do Tabeli Team i zaladować z niej dane - poczytaj o "lazy loading"
         public ViewResult Index() => View(_userManager.Users.Include(x => x.Team));
@@ -38,7 +40,7 @@ namespace TaskAppCore.Controllers
         public ViewResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserModel model)
+        public async Task<IActionResult> Create(UserAdminCreateModel model)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +134,11 @@ namespace TaskAppCore.Controllers
                         AddErrorsFromResult(validPass);
                 }
 
-                user.Team.TeamId = _teamRepository.Teams.Where(t => t.TeamId == teamId).FirstOrDefault().TeamId;
+                if (_teamRepository.Teams.FirstOrDefault(t => t.TeamId == teamId) != null && _userRepository.Users.FirstOrDefault(u => u.Id == id).TeamId != teamId)
+                {
+                    user.TeamId = teamId;
+                    _userRepository.Users.FirstOrDefault(u => u.Id == id).Tasks = null;
+                }
 
                 if((validEmail.Succeeded && validPass == null) || 
                     (validEmail.Succeeded && password != string.Empty && validPass.Succeeded))
