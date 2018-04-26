@@ -22,7 +22,7 @@ namespace TaskAppCore.Models
             _context.SaveChanges();
         }
 
-        public void CreateTask(Task task)
+        public void AddTask(Task task)
         {
             _context.Tasks.Add(task);
             _context.SaveChanges();

@@ -44,7 +44,7 @@ namespace TaskAppCore.Controllers
                     TeamId = _teamRepository.Teams.FirstOrDefault(x => x.TeamId == model.TeamId).TeamId,
                     IsToDo = true
                 };
-                _taskRepository.CreateTask(task);
+                _taskRepository.AddTask(task);
             }
             return RedirectToAction("Index");
         }

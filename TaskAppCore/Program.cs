@@ -25,7 +25,7 @@ namespace TaskAppCore
                 try
                 {
                     var conf = services.GetService<IConfiguration>();
-                    var context = services.GetRequiredService<TaskCoreDbContext>();
+                    var context = services.GetRequiredService<AppIdentityDbContext>();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 

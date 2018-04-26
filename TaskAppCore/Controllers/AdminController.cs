@@ -83,7 +83,7 @@ namespace TaskAppCore.Controllers
             }
             else
             {
-                // jeżeli taki user nie istniał dodajem error
+                // jeżeli taki user nie istniał dodaje error
                 ModelState.AddModelError("", "User Not Found");
             }
 

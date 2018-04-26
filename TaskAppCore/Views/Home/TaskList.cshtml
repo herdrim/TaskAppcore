@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TaskAppCore.Models.Task>
+
+@{
+    ViewBag.Title = "Tasks List";
+}
+
+<div class="bg-primary panel-body"><h4>Tasks</h4></div><br />
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+<table>
+    <thead><tr>Name</tr><tr>Description</tr><tr>User</tr><tr>Deathline</tr></thead>
+    @if (Model != null)
+    {
+        foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Name</td>
+                <td>@t.Description</td>
+                <td>@t.User.UserName</td>
+                <td>@t.Deathline</td>
+                <td>
+                    <form asp-action="DeleteTask" asp-route-taskId="@t.TaskId" method="post">
+                        <a class="btn btn-sm btn-primary" asp-action="EditTask" asp-route-taskId="@t.TaskId">Edit</a>
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    }
+    else
+    {
+        <tr><td colspan="4">There are no tasks in your team</td></tr>
+    }
+</table>

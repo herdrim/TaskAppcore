@@ -12,54 +12,66 @@
 
 <div width="100%">
     <div class="droplist" id="IsToDo">
-        @foreach (var t in Model.TeamTasks)
+        @if (Model.TeamTasks != null)
         {
-            if (t.IsToDo && t.User == null)
+            @foreach (var t in Model.TeamTasks)
             {
-                <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
-            }
-            else if (t.IsToDo && t.UserId != Model.UserId)
-            {
-                <p>@t.Name -> @t.User.UserName</p>
+                if (t.IsToDo && t.User == null)
+                {
+                    <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
+                }
+                else if (t.IsToDo && t.UserId != Model.UserId)
+                {
+                    <p>@t.Name -> @t.User.UserName</p>
+                }
             }
         }
     </div>
     <div class="droplist" id="IsInProgress">
-        @foreach (var t in Model.TeamTasks)
+        @if (Model.TeamTasks != null)
         {
-            if (t.IsInProgress && t.User == null)
+            @foreach (var t in Model.TeamTasks)
             {
-                <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
-            }
-            else if (t.IsInProgress && t.UserId != Model.UserId)
-            {
-                <p>@t.Name -> @t.User.UserName</p>
+                if (t.IsInProgress && t.User == null)
+                {
+                    <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
+                }
+                else if (t.IsInProgress && t.UserId != Model.UserId)
+                {
+                    <p>@t.Name -> @t.User.UserName</p>
+                }
             }
         }
     </div>
     <div class="droplist" id="IsTested">
-        @foreach (var t in Model.TeamTasks)
+        @if (Model.TeamTasks != null)
         {
-            if (t.IsTested && t.User == null)
+            @foreach (var t in Model.TeamTasks)
             {
-                <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
-            }
-            else if (t.IsTested && t.UserId != Model.UserId)
-            {
-                <p>@t.Name -> @t.User.UserName</p>
+                if (t.IsTested && t.User == null)
+                {
+                    <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
+                }
+                else if (t.IsTested && t.UserId != Model.UserId)
+                {
+                    <p>@t.Name -> @t.User.UserName</p>
+                }
             }
         }
     </div>
     <div class="droplist" id="IsFinished">
-        @foreach (var t in Model.TeamTasks)
+        @if (Model.TeamTasks != null)
         {
-            if (t.IsFinished && t.User == null)
+            @foreach (var t in Model.TeamTasks)
             {
-                <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
-            }
-            else if (t.IsFinished && t.UserId != Model.UserId)
-            {
-                <p>@t.Name -> @t.User.UserName</p>
+                if (t.IsFinished && t.User == null)
+                {
+                    <p>@t.Name <a id="@t.TaskId" class="btn btn-success" onclick="OnAssignClick(this)">Assign</a></p>
+                }
+                else if (t.IsFinished && t.UserId != Model.UserId)
+                {
+                    <p>@t.Name -> @t.User.UserName</p>
+                }
             }
         }
     </div>
@@ -69,39 +81,54 @@
 
 <div width="100%">
     <div class="droplist" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-        @foreach (var t in Model.UserTasks)
+        @if (Model.UserTasks != null)
         {
-            if (t.IsToDo)
+            @foreach (var t in Model.UserTasks)
             {
-                <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                if (t.IsToDo)
+                {
+                    <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                }
             }
         }
     </div>
     <div class="droplist" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
-        @foreach (var t in Model.UserTasks)
+        @if (Model.UserTasks != null)
         {
-            if (t.IsInProgress)
+            @foreach (var t in Model.UserTasks)
             {
-                <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                if (t.IsInProgress)
+                {
+                    <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                }
             }
         }
     </div>
     <div class="droplist" id="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
-        @foreach (var t in Model.UserTasks)
+        @if (Model.UserTasks != null)
         {
-            if (t.IsTested)
+            @foreach (var t in Model.UserTasks)
             {
-                <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                if (t.IsTested)
+                {
+                    <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                }
             }
         }
     </div>
     <div class="droplist" id="div4" ondrop="drop(event)" ondragover="allowDrop(event)">
-        @foreach (var t in Model.UserTasks)
+        @if (Model.UserTasks != null)
         {
-            if (t.IsFinished)
+            @foreach (var t in Model.UserTasks)
             {
-                <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                if (t.IsFinished)
+                {
+                    <p draggable="true" ondragstart="drag(event)">@t.Name<a id="@t.TaskId" class="btn btn-danger" onclick="OnResignClick(this)">Resign</a></p>
+                }
             }
         }
     </div>
 </div>
+<br style="clear:both" /><br />
+<a class="btn btn-primary" asp-action="TaskList">Task List</a>
+<a class="btn btn-primary" asp-action="CreateTask">Create Task</a>

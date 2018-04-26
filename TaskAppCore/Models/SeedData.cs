@@ -5,22 +5,23 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TaskAppCore.Models
 {
     public static class SeedData
     {
-        public static void EnsureData(TaskCoreDbContext context)
+        public static void EnsureData(AppIdentityDbContext context)
         {
             context.Database.EnsureCreated();
 
             if (!context.Teams.Any())
             {
                 context.Teams.AddRange(                
-                    new Team{ Name="team1", Password="team1", Tasks = null },
-                    new Team{ Name="team2", Password="team2", Tasks = null },
-                    new Team{ Name="team3", Password="team3", Tasks = null }
+                    new Team{ Name="team1", Password=HashPassword("team1"), Tasks = null },
+                    new Team{ Name="team2", Password= HashPassword("team2"), Tasks = null },
+                    new Team{ Name="team3", Password= HashPassword("team3"), Tasks = null }
                 );
                 context.SaveChanges();
             }
@@ -34,6 +35,15 @@ namespace TaskAppCore.Models
                     new Task{ Name="task4", Description="do sth4", Deathline=new DateTime(2018, 11, 13), StartTime=null, EndTime=null, IsToDo=true, IsInProgress=false, IsTested=false, IsFinished=false, User=null, Team=null }
                 );
                 context.SaveChanges();
+            }
+        }
+
+        public static string HashPassword(string password)
+        {
+            using (System.Security.Cryptography.SHA1Managed sha1 = new System.Security.Cryptography.SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hash);
             }
         }
 

@@ -11,7 +11,7 @@ namespace TaskAppCore.Models
 
         void SaveChanges();
 
-        void CreateTask(Models.Task task);
+        void AddTask(Models.Task task);
 
         void DeleteTask(Models.Task task);
 

@@ -1,0 +1,21 @@
+﻿@model TeamJoinViewModel
+
+@{
+    ViewBag.Title = "Join Team";
+}
+
+<script>
+    function OnSubmit() {
+        return confirm("All your tasks will be unassigned.\nAre you sure you want to change your team?\n(The team will be removed if you are the last member!)");
+    }
+</script>
+
+<div class="bg-primary panel-body"><h4>Join Team</h4></div><br />
+<div class="panel-body">
+    <form asp-action="Index" method="post" onsubmit="return OnSubmit();">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <select class="input-group" asp-for="TeamId" asp-items="@(new SelectList(Model.Teams, "TeamId", "Name"))"></select><br />
+        <input class="input-group" type="password" asp-for="Password" /><br />
+        <button type="submit" class="btn btn-primary">Join</button>
+    </form>
+</div>

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using System.Security.Claims;
 
 namespace TaskAppCore.Models
 {
@@ -20,6 +22,13 @@ namespace TaskAppCore.Models
         }
 
         public IEnumerable<Team> Teams => _context.Teams.Include(x => x.Members).Include(x => x.Tasks);
+
+        public async Task<Team> GetCurrentTeam(ClaimsPrincipal user)
+        {
+            AppUser usr = await _userManager.GetUserAsync(user);
+            Team team = _context.Teams.FirstOrDefault(t => t.TeamId == usr.TeamId);
+            return team;
+        }
 
         public void SaveChanges()
         {
@@ -39,6 +48,8 @@ namespace TaskAppCore.Models
 
         public void DeleteTeam(Team team)
         {
+            foreach (var task in _context.Tasks.Include(t => t.Team).Where(t => t.Team == team))
+                _context.Remove(task);
             _context.Teams.Remove(team);
             _context.SaveChanges();
         }
@@ -56,28 +67,32 @@ namespace TaskAppCore.Models
             var teamToAdd = Teams.FirstOrDefault(x => x.TeamId == team.TeamId);
 
             foreach (var member in members)
-            {                
-                teamToAdd.Members.Add(member);                
+            {
+                teamToAdd.Members.Add(member);
             }
             _context.Teams.Update(teamToAdd);
             _context.SaveChanges();
         }
 
+
+        public void CancelUserTasks(Team team, AppUser user)
+        {
+            var tasks = team.Tasks.Where(t => t.UserId == user.Id);
+            foreach(var t in tasks)
+            {
+                t.UserId = null;
+            }
+            _context.Tasks.UpdateRange(tasks);
+            _context.SaveChanges();
+        }
+
         public string HashPassword(string password)
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
-            byte[] hash = pbkdf2.GetBytes(20);
-
-            byte[] hashBytes = new byte[36];
-            Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-
-            string savedPasswordHash = Convert.ToBase64String(hashBytes);
-
-            return savedPasswordHash;
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hash);
+            }
         }
     }
 }
