@@ -26,7 +26,7 @@ namespace TaskAppCore.Models
         public async Task<Team> GetCurrentTeam(ClaimsPrincipal user)
         {
             AppUser usr = await _userManager.GetUserAsync(user);
-            Team team = _context.Teams.FirstOrDefault(t => t.TeamId == usr.TeamId);
+            Team team = _context.Teams.Include(x => x.Tasks).FirstOrDefault(t => t.TeamId == usr.TeamId);
             return team;
         }
 
